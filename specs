@@ -1,0 +1,5 @@
+var jaz = './jaz',
+	ts = require('ts').ToolStack,
+	fsl = require('./fsloader');
+
+	require(jaz.concat('/fsl.jaz'))(ts,fsl);

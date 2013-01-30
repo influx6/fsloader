@@ -1,0 +1,44 @@
+module.exports = (function(ts,fsl){
+	
+	var jaz = ts.Jaz, m = ts.Matchers, man = jaz.createManager();
+
+
+	man.add("Unit Testing FSLoader",function(){
+		var fs = fsl.create();
+
+		this.it('can add a valid source file',function(){
+			m(this).obj(fs.add('fix1.js','./jaz/fixtures/fix1.js',null,null,false)).is(true);
+		});
+
+		this.it('can add a stringed source',function(){
+			m(this).obj(fs.addSource('stringd.js','module.exports = function Logger(name){ console.log("calling stringed: Mr.",name); }')).isTrue();
+		});
+
+		this.it("can't add a invalid source",function(){
+			m(this).obj(fs.add('fix10','./jaz/fixtures/fix10.js')).isNot(true);
+		});
+
+		this.it('can load a source',function(){
+			m(this).obj(fs.load('fix1.js') && fs.load('stringd.js')).isValid();
+		});
+
+		this.it('can reload a source',function(){
+			m(this).obj(fs.reload('fix1.js') && fs.reload('stringd.js')).isValid();
+		});
+
+		this.it('can remove a source',function(){
+			fs.remove('fix1.js');
+			m(this).obj(fs.load('fix1.js') && fs.reload('fix1.js')).isFalse();
+		});
+
+		this.it('can flush all sources',function(){
+			fs.flush();
+			m(this).obj(fs.lists).isEmpty();
+			m(this).obj(fs.cache).isEmpty();
+		});
+
+	});
+
+	man.run();
+
+});
